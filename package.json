@@ -8,8 +8,13 @@
     "start": "node index.js"
   },
   "keywords": [
-    "Streams"
+    "Streams",
+    "PokeAPI"
   ],
   "author": "Hermes Espínola González",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "yargs": "^17.0.1"
+  }
 }
