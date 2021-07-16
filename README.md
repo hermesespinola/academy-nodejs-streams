@@ -16,7 +16,7 @@ The CLI tool receives the following parameters:
 - `moves`: a list of move names.
 - `types`: a list of pokémon types.
 
-The next parameters are integers, and they can be queried with a boolean expression (i.e. `--height >= 12`): `height`, `speed`, `weight`, `base-experience`, `hp`, `attack`, `defense`, `special-attack`, `special-defense`.
+The next parameters are integers, and they can be queried with a boolean expression (i.e. `--height >= 12`): `height`, `speed`, `weight`, `hp`, `attack`, `defense`, `special-attack`, `special-defense`.
 
 ```bash
 npm start --types electric --hp >25 --speed <100
