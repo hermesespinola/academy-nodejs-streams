@@ -9,22 +9,29 @@ The purpose of the challenge is to create a tool that allows us to query the API
 
 ## Description
 
-The CLI tool receives the following parameters:
-- `verbose`: a flag that tells that the response will be a complete JSON description. Returns only pokémon names otherwise.
-- `is-starter`: a flag that tells if the pokéman can be picked as a starter.
+The CLI tool receives a single command `pokemon` followed by some optional parameters:
+- `verbose`: For debugging purposes, log every step of the program.
 - `ability`: a list of ability names.
 - `moves`: a list of move names.
 - `types`: a list of pokémon types.
+- `height`: the height of a pokémon.
+- `weight`: the weight of a pokémon.
 
-The next parameters are integers, and they can be queried with a boolean expression (i.e. `--height >= 12`): `height`, `speed`, `weight`, `hp`, `attack`, `defense`, `special-attack`, `special-defense`.
+The `height` and `weight` parameters are integers, and they can be queried with a boolean expression (i.e. `--height >= 12`):
+
+If no parameter are specified, the app will return all existing pokémon.
+
+For example, the following command:
 
 ```bash
-npm start --types electric --hp >25 --speed <100
+./pokeAPI pokemon --types electric --height >=10
 ```
+
+will return all Pokémon which types include "electric" and has a height of at least 10.
 
 ## Getting started
 
 - Make sure you have Node installed, preferably at least version `12.x.x`.
 - Install the dependencies `npm i` or `yarn`.
 - Run the project, you should see a description of the CLI inputs.
-- Input is already parsed handled and parsed, you can find the code in `args-parser.js`.
+- Input parameters are already parsed, you can find the code in `args-parser.js`.

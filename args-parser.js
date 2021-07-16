@@ -4,51 +4,31 @@ const { hideBin } = require('yargs/helpers');
 module.exports = () => Yargs(hideBin(process.argv))
   .command('pokemon [filters]', 'Search Pokemon that match the given filters', (yargs) =>
     yargs
-      .option('is-starter', { type: 'boolean' })
       .option('abilities', {
+        alias: 'a',
         type: 'array',
         description: 'A list of ability names',
       })
       .option('moves', {
+        alias: 'm',
         type: 'array',
         description: 'A list of move names',
       })
       .option('types', {
+        alias: "t",
         type: 'array',
         description: 'A list of pokemon types (usually pokemon have 1 type, sometimes 2, and very rarelly 3 types)',
       })
       .option('height', {
+        alias: 'h',
         type: 'string',
         description: 'A boolean expression to query pokemon height',
       })
-      .option('speed', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon speed',
-      })
       .option('weight', {
+        alias: 'h',
         type: 'string',
         description: 'A boolean expression to query pokemon weight',
       })
-      .option('hp', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon hp',
-      })
-      .option('attack', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon attack',
-      })
-      .option('defense', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon defense',
-      })
-      .option('special-attack', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon special-attack',
-      })
-      .option('special-defense', {
-        type: 'string',
-        description: 'A boolean expression to query pokemon special-defense',
-      }),
   )
   .option('verbose', {
     alias: 'v',
