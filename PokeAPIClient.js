@@ -1,21 +1,38 @@
 const fetch = require('node-fetch');
+const { Readable } = require('stream');
 
 const pokeAPIEndpoint = 'https://pokeapi.co/api/v2';
 
 module.exports = {
-  async fetchAllPokemon() {
+  fetchPokemonList() {
     let url = `${pokeAPIEndpoint}/pokemon`;
-    do {
-      const res = await fetch(url);
-      const { next, results } = await res.json();
-      url = next;
+    const buffer = [];
+    const outputStream = new Readable({
+      objectMode: true,
+      async read(size) {
+        if (buffer.length < size) {
+          const res = await fetch(url);
+          const { next, results } = await res.json();
+          buffer.push(...results);
 
-      // TODO: create Readable pokemon list stream.
-      console.log(results);
-    } while (pokeAPIEndpoint);
+          url = next;
+        }
+
+        for (let i = 0; i < size.length || buffer.length > 0; i++) {
+          this.push(buffer.shift());
+        }
+
+        // End our stream with a null push.
+        if (!url) {
+          this.push(null);
+        }
+      }
+    });
+
+    return outputStream;
   },
 
-  async fetchPokemon(pokemon) {
+  async fetchPokemonInfo(pokemon) {
     const res = await fetch(pokemon.url);
 
     // We'll only keep the fields we are interested in.
