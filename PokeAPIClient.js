@@ -1,35 +1,37 @@
 const fetch = require('node-fetch');
-const { Readable } = require('stream');
 
 const pokeAPIEndpoint = 'https://pokeapi.co/api/v2';
 
 module.exports = {
-  fetchPokemonList() {
-    let url = `${pokeAPIEndpoint}/pokemon`;
-    const buffer = [];
-    const outputStream = new Readable({
-      objectMode: true,
-      async read(size) {
-        if (buffer.length < size) {
-          const res = await fetch(url);
-          const { next, results } = await res.json();
-          buffer.push(...results);
+  async fetchPokemonList() {
+    // Fetch the whole pokemon list (currently 1118)
+    let url = `${pokeAPIEndpoint}/pokemon?limit=1000`;
+    const res = await fetch(url);
+    const { results } = await res.json();
 
-          url = next;
-        }
+    // const outputStream = new Readable({
+    //   objectMode: true,
+    //   async read(size) {
+    //     if (buffer.length < size) {
+    //       const res = await fetch(url);
+    //       const { next, results } = await res.json();
+    //       buffer.push(...results);
 
-        for (let i = 0; i < size.length || buffer.length > 0; i++) {
-          this.push(buffer.shift());
-        }
+    //       url = next;
+    //     }
 
-        // End our stream with a null push.
-        if (!url) {
-          this.push(null);
-        }
-      }
-    });
+    //     for (let i = 0; i < size.length || buffer.length > 0; i++) {
+    //       this.push(buffer.shift());
+    //     }
 
-    return outputStream;
+    //     // End our stream with a null push.
+    //     if (!url) {
+    //       this.push(null);
+    //     }
+    //   }
+    // });
+
+    return results;
   },
 
   async fetchPokemonInfo(pokemon) {
