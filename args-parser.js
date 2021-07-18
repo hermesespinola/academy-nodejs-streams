@@ -2,7 +2,7 @@ const Yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
 module.exports = () => Yargs(hideBin(process.argv))
-  .command('pokemon [filters]', 'Search Pokemon that match the given filters', (yargs) =>
+  .command('pokemon', 'Search Pokemon that match the given filters', (yargs) =>
     yargs
       .option('abilities', {
         alias: 'a',
@@ -15,7 +15,7 @@ module.exports = () => Yargs(hideBin(process.argv))
         description: 'A list of move names',
       })
       .option('types', {
-        alias: "t",
+        alias: 't',
         type: 'array',
         description: 'A list of pokemon types (usually pokemon have 1 type, sometimes 2, and very rarelly 3 types)',
       })
@@ -36,4 +36,5 @@ module.exports = () => Yargs(hideBin(process.argv))
     description: 'Run with verbose logging',
   })
   .demandCommand(1)
+  .strict()
   .argv;
