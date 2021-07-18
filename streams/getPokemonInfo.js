@@ -1,6 +1,7 @@
 const { Transform } = require('stream');
+const PokeAPI = require('../PokeAPIClient');
 
-const getPokemonInfo = new Transform({
+const getPokemonInfo = () => new Transform({
   objectMode: true,
   transform(pokemon, _, callback) {
     const pokemonPromise = PokeAPI.fetchPokemonInfo(pokemon);
