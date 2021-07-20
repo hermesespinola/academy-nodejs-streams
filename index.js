@@ -1,7 +1,6 @@
-const argsParser = require('./args-parser');
-const PokeAPI = require('./PokeAPIClient');
+const args = require('./args-parser')();
+const commands = require('./commands');
 
-const args = argsParser();
+const [commandName] = args._;
 
-// Write code here!
-PokeAPI.fetchAllPokemon();
+commands[commandName](args);
