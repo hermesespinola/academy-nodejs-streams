@@ -1,8 +1,9 @@
 const multipipe = require('multipipe');
-const { Writable, pipeline } = require('stream');
+const { pipeline } = require('stream');
 const PokeAPI = require('../PokeAPIClient');
 const awaitStream = require('../streams/awaitStream');
 const filterStream = require('../streams/filterStream');
+const logStream = require('../streams/logStream');
 
 async function* pokemonIterator(types, abilities, { limit, verbose }) {
   let pokemonList;
@@ -21,6 +22,23 @@ async function* pokemonIterator(types, abilities, { limit, verbose }) {
 }
 
 function pokemonCommand({ types, abilities, height, weight, limit, verbose }) {
+  const filters = makeFilters(types, abilities, height, weight);
+
+  pipeline(
+    pokemonIterator(types, abilities, { limit, verbose }),
+    awaitStream(PokeAPI.fetchPokemonInfo),
+    ...filters,
+    logStream(),
+    (error) => {
+      if (error) {
+        console.error(error.message);
+        process.exit(1);
+      }
+    }
+  )
+}
+
+function makeFilters(types, abilities, height, weight) {
   // Add array filters
   const filters = [];
   if (types) {
@@ -50,23 +68,7 @@ function pokemonCommand({ types, abilities, height, weight, limit, verbose }) {
     ));
   }
 
-  pipeline(
-    pokemonIterator(types, abilities, { limit, verbose }),
-    awaitStream(PokeAPI.fetchPokemonInfo),
-    ...filters,
-    new Writable({
-      objectMode: true,
-      async write(pokemon, _, callback) {
-        console.log(pokemon);
-        callback();
-      }}),
-    (error) => {
-      if (error) {
-        console.error(error.message);
-        process.exit(1);
-      }
-    }
-  )
+  return filters;
 }
 
 module.exports = pokemonCommand;
