@@ -1,24 +1,40 @@
-const { Writable, Readable } = require('stream');
-const { pipeline } = require('stream');
+const multipipe = require('multipipe');
+const { Writable, pipeline } = require('stream');
 const PokeAPI = require('../PokeAPIClient');
-const getPokemonInfo = require('../streams/getPokemonInfo');
 const awaitStream = require('../streams/awaitStream');
-const pokemonFilter = require('../streams/pokemonFilter');
+const filterStream = require('../streams/filterStream');
 
 async function* pokemonIterator() {
   yield* await PokeAPI.fetchPokemonList();
 }
 
-function pokemonCommand(args) {
+function pokemonCommand({ types, moves, abilities }) {
+  // Add filters
+  const filters = [];
+  if (types) {
+    filters.push(filterStream((pokemon) =>
+      types.every(t => pokemon.types.find(({ type }) => type === t))
+    ))
+  }
+  if (moves) {
+    filters.push(filterStream((pokemon) =>
+      moves.every(m => pokemon.moves.find(({ move }) => move === m))
+    ))
+  }
+  if (abilities) {
+    filters.push(filterStream((pokemon) =>
+      abilities.every(a => pokemon.abilities.find(({ ability }) => ability === a))
+    ))
+  }
+
   pipeline(
-    Readable.from(pokemonIterator(), { objectMode: true }),
-    getPokemonInfo(),
-    awaitStream(),
-    pokemonFilter(args),
+    pokemonIterator(),
+    awaitStream(PokeAPI.fetchPokemonInfo),
+    multipipe(filters),
     new Writable({
       objectMode: true,
       async write(pokemon, _, callback) {
-        console.log(pokemon.name);
+        console.log(pokemon.name, pokemon.types.map(({ type }) => type.name));
         callback();
       }}),
     (error) => {

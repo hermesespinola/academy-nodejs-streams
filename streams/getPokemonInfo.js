@@ -6,7 +6,7 @@ const getPokemonInfo = () => new Transform({
   async transform(pokemon, _, callback) {
     const pokemonPromise = PokeAPI.fetchPokemonInfo(pokemon);
     callback(null, pokemonPromise);
-  }
+  },
 });
 
 module.exports = getPokemonInfo;

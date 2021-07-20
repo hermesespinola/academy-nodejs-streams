@@ -17,12 +17,12 @@ module.exports = {
 
     // We'll only keep the fields we are interested in.
     const {
-      id, name, height, weight,
+      name, height, weight,
       abilities, moves, types,
     } = await res.json();
 
     return {
-      id, name, height, weight,
+      name, height, weight,
       abilities, moves, types,
     };
   }
