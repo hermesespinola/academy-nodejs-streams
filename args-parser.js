@@ -29,6 +29,26 @@ module.exports = () => Yargs(hideBin(process.argv))
         type: 'string',
         description: 'A boolean expression to query pokemon weight',
       })
+      .middleware((argv) => {
+        const boolRegex = /^(<|>|<=|>=|===?)?\s*(\d+)$/;
+        if (argv.height) {
+          const match = argv.height.match(boolRegex);
+          if (!match) {
+            console.error('Invalid argument: height');
+            process.exit(1);
+          } else {
+            argv.height = [match[1], Number.parseInt(match[2])];
+          }
+        }
+        if (argv.weight) {
+          const match = argv.weight.match(boolRegex);
+          if (!match) {
+            console.error('Invalid argument: weight');
+            process.exit(1);
+          }
+          argv.weight = [match[1], Number.parseInt(match[2])];
+        }
+      })
   )
   .option('verbose', {
     alias: 'v',
