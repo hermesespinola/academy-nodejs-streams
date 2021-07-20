@@ -3,9 +3,9 @@ const fetch = require('node-fetch');
 const pokeAPIEndpoint = 'https://pokeapi.co/api/v2';
 
 module.exports = {
-  async fetchPokemonList() {
+  async fetchPokemonList(limit = 1118) {
     // Fetch the whole pokemon list (currently 1118)
-    let url = `${pokeAPIEndpoint}/pokemon?limit=9999`;
+    let url = `${pokeAPIEndpoint}/pokemon?limit=${limit}`;
     const res = await fetch(url);
     const { results } = await res.json();
 
