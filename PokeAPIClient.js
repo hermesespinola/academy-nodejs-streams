@@ -4,12 +4,27 @@ const pokeAPIEndpoint = 'https://pokeapi.co/api/v2';
 
 module.exports = {
   async fetchPokemonList(limit = 1118) {
-    // Fetch the whole pokemon list (currently 1118)
     let url = `${pokeAPIEndpoint}/pokemon?limit=${limit}`;
     const res = await fetch(url);
     const { results } = await res.json();
 
     return results;
+  },
+
+  async fetchPokemonListByAbility(ability) {
+    let url = `${pokeAPIEndpoint}/ability/${ability}`;
+    const res = await fetch(url);
+    const { pokemon } = await res.json();
+
+    return pokemon.map(({ pokemon }) => pokemon);
+  },
+
+  async fetchPokemonListByType(type) {
+    let url = `${pokeAPIEndpoint}/type/${type}`;
+    const res = await fetch(url);
+    const { pokemon } = await res.json();
+
+    return pokemon.map(({ pokemon }) => pokemon);
   },
 
   async fetchPokemonInfo(pokemon) {

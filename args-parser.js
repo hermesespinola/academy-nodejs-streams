@@ -28,7 +28,7 @@ module.exports = () => Yargs(hideBin(process.argv))
         alias: 'l',
         type: 'number',
         default: 1118,
-        description: 'Max number of pokemon to process',
+        description: 'Max number of pokemon to process (currently there are  1118)',
       })
       .middleware((argv) => {
         const boolRegex = /^(<|>|<=|>=|===?)?\s*(\d+)$/;

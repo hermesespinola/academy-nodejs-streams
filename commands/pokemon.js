@@ -4,8 +4,16 @@ const PokeAPI = require('../PokeAPIClient');
 const awaitStream = require('../streams/awaitStream');
 const filterStream = require('../streams/filterStream');
 
-async function* pokemonIterator(limit, verbose) {
-  const pokemonList = await PokeAPI.fetchPokemonList(limit);
+async function* pokemonIterator(types, abilities, { limit, verbose }) {
+  let pokemonList;
+  if (abilities) {
+    pokemonList = await PokeAPI.fetchPokemonListByAbility(abilities[0]);
+  } else if (types) {
+    pokemonList = await PokeAPI.fetchPokemonListByType(types[0]);
+  } else {
+    pokemonList = await PokeAPI.fetchPokemonList(limit);
+  }
+
   if (verbose) {
     console.log('Processing', pokemonList.length, 'pokemons');
   }
@@ -43,7 +51,7 @@ function pokemonCommand({ types, abilities, height, weight, limit, verbose }) {
   }
 
   pipeline(
-    pokemonIterator(limit, verbose),
+    pokemonIterator(types, abilities, { limit, verbose }),
     awaitStream(PokeAPI.fetchPokemonInfo),
     ...filters,
     new Writable({
