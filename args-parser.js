@@ -9,11 +9,6 @@ module.exports = () => Yargs(hideBin(process.argv))
         type: 'array',
         description: 'A list of ability names',
       })
-      .option('moves', {
-        alias: 'm',
-        type: 'array',
-        description: 'A list of move names',
-      })
       .option('types', {
         alias: 't',
         type: 'array',
@@ -28,6 +23,11 @@ module.exports = () => Yargs(hideBin(process.argv))
         alias: 'h',
         type: 'string',
         description: 'A boolean expression to query pokemon weight',
+      })
+      .option('limit', {
+        alias: 'l',
+        type: 'number',
+        description: 'Max number of pokemon to process',
       })
       .middleware((argv) => {
         const boolRegex = /^(<|>|<=|>=|===?)?\s*(\d+)$/;

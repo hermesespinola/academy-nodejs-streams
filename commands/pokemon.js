@@ -12,17 +12,12 @@ async function* pokemonIterator(verbose) {
   yield* pokemonList;
 }
 
-function pokemonCommand({ types, moves, abilities, height, width, verbose }) {
+function pokemonCommand({ types, abilities, height, width, verbose }) {
   // Add array filters
   const filters = [];
   if (types) {
     filters.push(filterStream((pokemon) =>
       types.every(t => pokemon.types.find(({ type }) => type === t))
-    ))
-  }
-  if (moves) {
-    filters.push(filterStream((pokemon) =>
-      moves.every(m => pokemon.moves.find(({ move }) => move === m))
     ))
   }
   if (abilities) {
@@ -54,7 +49,7 @@ function pokemonCommand({ types, moves, abilities, height, width, verbose }) {
     new Writable({
       objectMode: true,
       async write(pokemon, _, callback) {
-        console.log(pokemon.name, pokemon.types.map(({ type }) => type.name));
+        console.log(pokemon);
         callback();
       }}),
     (error) => {
