@@ -4,25 +4,25 @@ const PokeAPI = require('../PokeAPIClient');
 const awaitStream = require('../streams/awaitStream');
 const filterStream = require('../streams/filterStream');
 
-async function* pokemonIterator(verbose) {
-  const pokemonList = await PokeAPI.fetchPokemonList();
+async function* pokemonIterator(limit, verbose) {
+  const pokemonList = await PokeAPI.fetchPokemonList(limit);
   if (verbose) {
     console.log('Processing', pokemonList.length, 'pokemons');
   }
   yield* pokemonList;
 }
 
-function pokemonCommand({ types, abilities, height, width, verbose }) {
+function pokemonCommand({ types, abilities, height, weight, limit, verbose }) {
   // Add array filters
   const filters = [];
   if (types) {
     filters.push(filterStream((pokemon) =>
-      types.every(t => pokemon.types.find(({ type }) => type === t))
+      types.every(type => pokemon.types.includes(type))
     ))
   }
   if (abilities) {
     filters.push(filterStream((pokemon) =>
-      abilities.every(a => pokemon.abilities.find(({ ability }) => ability === a))
+      abilities.every(ability => pokemon.abilities.includes(ability))
     ))
   }
 
@@ -34,16 +34,16 @@ function pokemonCommand({ types, abilities, height, width, verbose }) {
       matchesHeight(pokemon.height)
     ))
   }
-  if (width) {
-    const [op, w] = width;
-    const matchesWidth = Function('width', `return width ${op ?? '==='} ${w}`);
+  if (weight) {
+    const [op, w] = weight;
+    const matchesWeight = Function('weight', `return weight ${op ?? '==='} ${w}`);
     filters.push(filterStream((pokemon) => 
-      matchesWidth(pokemon.width)
+      matchesWeight(pokemon.weight)
     ));
   }
 
   pipeline(
-    pokemonIterator(verbose),
+    pokemonIterator(limit, verbose),
     awaitStream(PokeAPI.fetchPokemonInfo),
     ...filters,
     new Writable({

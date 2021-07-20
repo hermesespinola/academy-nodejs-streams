@@ -21,9 +21,13 @@ module.exports = {
       abilities, types,
     } = await res.json();
 
+    const simplifiedAbilities = abilities.map(({ ability }) => ability.name);
+    const simplifiedTypes = types.map(({ type }) => type.name);
+
     return {
       name, height, weight,
-      abilities, types,
+      abilities: simplifiedAbilities,
+      types: simplifiedTypes,
     };
   }
 }
