@@ -12,7 +12,6 @@ The purpose of the challenge is to create a tool that allows us to query the API
 The CLI tool receives a single command `pokemon` followed by some optional parameters:
 - `verbose`: For debugging purposes, log every step of the program.
 - `ability`: a list of ability names.
-- `moves`: a list of move names.
 - `types`: a list of pokémon types.
 - `height`: the height of a pokémon.
 - `weight`: the weight of a pokémon.
