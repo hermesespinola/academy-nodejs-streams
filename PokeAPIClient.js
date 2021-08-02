@@ -27,8 +27,8 @@ module.exports = {
     return pokemon.map(({ pokemon }) => pokemon);
   },
 
-  async fetchPokemonInfo(pokemon) {
-    const res = await fetch(pokemon.url);
+  async fetchPokemonInfo(url) {
+    const res = await fetch(url);
 
     // We'll only keep the fields we are interested in.
     const {
