@@ -14,7 +14,6 @@
   "author": "Hermes Espínola González",
   "license": "ISC",
   "dependencies": {
-    "multipipe": "^4.0.0",
     "node-fetch": "^2.6.1",
     "yargs": "^17.0.1"
   }
