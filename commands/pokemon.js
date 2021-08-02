@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const { pipeline } = require('stream');
 const JSONStream = require('JSONStream');
 const PokeAPI = require('../PokeAPIClient');
@@ -10,7 +11,7 @@ function pokemonCommand({ types, abilities, height, weight, limit, verbose }) {
   const filters = makeFilters(types, abilities, height, weight);
 
   pipeline(
-    fs.createReadStream(`${__dirname}/pokemonList`),
+    fs.createReadStream(path.join(__dirname, '..', 'pokemonList')),
     JSONStream.parse('results.*.url'),
     awaitStream(PokeAPI.fetchPokemonInfo),
     ...filters,
